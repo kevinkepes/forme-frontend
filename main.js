@@ -16,6 +16,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const useSmoothScroll = !isTouchDevice && !prefersReducedMotion;
     const allowScrollEffects = useSmoothScroll;
     let lenis = null;
+    const topNav = document.querySelector('.top-nav');
+
+    function updateNavState() {
+        if (!topNav) return;
+        topNav.classList.toggle('is-scrolled', window.scrollY > 8);
+    }
+
+    window.addEventListener('scroll', updateNavState, { passive: true });
+    updateNavState();
 
     function setupLenis() {
         if (lenis || !window.Lenis) return lenis;
@@ -27,7 +36,10 @@ document.addEventListener('DOMContentLoaded', () => {
             smoothTouch: false,
         });
 
-        lenis.on('scroll', ScrollTrigger.update);
+        lenis.on('scroll', () => {
+            ScrollTrigger.update();
+            updateNavState();
+        });
         gsap.ticker.add((time) => lenis.raf(time * 1000));
         gsap.ticker.lagSmoothing(0);
         lenis.stop();
@@ -338,7 +350,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        document.querySelectorAll('.book-btn, .image-container').forEach((target) => {
+        document.querySelectorAll('.book-btn').forEach((target) => {
             const releaseTap = () => {
                 gsap.to(target, { scale: 1, duration: 0.28, ease: "elastic.out(1, 0.65)" });
             };

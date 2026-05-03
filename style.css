@@ -129,6 +129,19 @@ body {
     z-index: 100;
     color: var(--dark-mode);
     text-transform: uppercase;
+    background-color: transparent;
+    border-bottom: 1px solid transparent;
+    transition: background-color 0.35s ease, border-color 0.35s ease, padding 0.35s ease;
+}
+
+.top-nav.is-scrolled {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    font-size: 0.74rem;
+    background-color: var(--bg-color);
+    background-image: radial-gradient(rgba(196, 197, 181, 0.045) 0.7px, transparent 0.7px);
+    background-size: 4px 4px;
+    border-bottom-color: var(--line-color);
 }
 
 .nav-location {
@@ -365,6 +378,7 @@ body {
     border-radius: 44% 56% 46% 54% / 36% 42% 58% 64%;
     transform-origin: center;
     backface-visibility: hidden;
+    pointer-events: none;
 }
 
 .image-container.large {
@@ -599,6 +613,12 @@ body {
         font-size: clamp(0.68rem, 2.7vw, 0.82rem);
     }
 
+    .top-nav.is-scrolled {
+        padding-top: 0.72rem;
+        padding-bottom: 0.72rem;
+        font-size: clamp(0.62rem, 2.45vw, 0.74rem);
+    }
+
     .hero-section {
         min-height: 100svh;
         display: flex;
@@ -784,6 +804,11 @@ body {
         align-items: flex-start;
         font-size: 0.72rem;
         padding: 1rem;
+    }
+
+    .top-nav.is-scrolled {
+        padding: 0.62rem 0.85rem;
+        font-size: 0.64rem;
     }
 
     .nav-location {
