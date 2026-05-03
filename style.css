@@ -436,7 +436,8 @@ body {
 }
 
 .gallery-row.right-aligned .image-container img {
-    object-position: 50% 8%;
+    object-position: 50% 0%;
+    transform: scale(1.1);
 }
 
 .gallery-row.center-aligned .image-container img {
@@ -741,7 +742,7 @@ body {
     }
 
     .gallery-row.right-aligned .image-container img {
-        object-position: 50% 5%;
+        object-position: 50% 0%;
     }
 
     .gallery-row.center-aligned .image-container img {
