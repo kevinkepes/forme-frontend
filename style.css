@@ -279,7 +279,7 @@ body {
         url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 520'%3E%3Cg fill='none' stroke='%23c4c5b5' stroke-width='1' stroke-opacity='.18'%3E%3Cpath d='M63 394C211 290 278 443 431 333C585 223 676 142 861 204C984 246 1049 338 1168 284'/%3E%3Cpath d='M26 304C181 206 291 344 432 249C592 141 683 82 851 134C999 180 1056 264 1190 215'/%3E%3Cpath d='M87 218C213 139 306 243 442 169C573 98 713 34 869 73C1012 109 1088 174 1183 148'/%3E%3Cpath d='M139 454C274 359 365 482 505 384C642 289 740 228 890 267C1011 299 1083 383 1160 347'/%3E%3C/g%3E%3C/svg%3E") center / cover no-repeat;
 }
 
-.brand-statement > * {
+.brand-statement>* {
     position: relative;
     z-index: 1;
 }
@@ -374,12 +374,14 @@ body {
 }
 
 .single-image .image-container {
-    border-radius: 42% 58% 47% 53% / 35% 43% 57% 65%;
+    aspect-ratio: 0.78;
+    border-radius: 38% 62% 52% 48% / 32% 46% 54% 68%;
 }
 
 .right-aligned .image-container {
     grid-column: 2;
-    border-radius: 52% 48% 45% 55% / 38% 35% 65% 62%;
+    aspect-ratio: 0.86;
+    border-radius: 58% 42% 39% 61% / 43% 33% 67% 57%;
 }
 
 .right-aligned .image-caption {
@@ -390,6 +392,8 @@ body {
 
 .center-aligned .image-container {
     grid-column: 1;
+    aspect-ratio: 0.8;
+    border-radius: 46% 54% 58% 42% / 30% 52% 48% 70%;
 }
 
 .center-aligned .image-caption {
@@ -689,6 +693,21 @@ body {
         justify-self: center !important;
     }
 
+    .single-image .image-container {
+        aspect-ratio: 0.78;
+        border-radius: 38% 62% 52% 48% / 32% 46% 54% 68%;
+    }
+
+    .right-aligned .image-container {
+        aspect-ratio: 0.86;
+        border-radius: 58% 42% 39% 61% / 43% 33% 67% 57%;
+    }
+
+    .center-aligned .image-container {
+        aspect-ratio: 0.8;
+        border-radius: 46% 54% 58% 42% / 30% 52% 48% 70%;
+    }
+
     .single-image .image-caption,
     .right-aligned .image-caption,
     .center-aligned .image-caption {
@@ -788,6 +807,7 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
     *,
     *::before,
     *::after {
