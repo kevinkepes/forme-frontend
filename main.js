@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const allowScrollEffects = useSmoothScroll;
     let lenis = null;
     const topNav = document.querySelector('.top-nav');
+    const heroVideo = document.querySelector('.hero-video');
 
     function updateNavState() {
         if (!topNav) return;
@@ -115,6 +116,42 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let introOpened = false;
 
+    function prepareHeroVideo() {
+        if (!heroVideo) return;
+
+        heroVideo.muted = true;
+        heroVideo.defaultMuted = true;
+        heroVideo.loop = true;
+        heroVideo.playsInline = true;
+        heroVideo.setAttribute('muted', '');
+        heroVideo.setAttribute('playsinline', '');
+        heroVideo.setAttribute('webkit-playsinline', '');
+    }
+
+    function ensureHeroVideoPlaying() {
+        if (!heroVideo) return;
+
+        prepareHeroVideo();
+
+        if (!heroVideo.currentSrc && heroVideo.networkState === heroVideo.NETWORK_EMPTY) {
+            heroVideo.load();
+        }
+
+        const playAttempt = heroVideo.play();
+        if (playAttempt && typeof playAttempt.catch === 'function') {
+            playAttempt.catch(() => {
+                window.setTimeout(() => {
+                    const retryAttempt = heroVideo.play();
+                    if (retryAttempt && typeof retryAttempt.catch === 'function') {
+                        retryAttempt.catch(() => {});
+                    }
+                }, 160);
+            });
+        }
+    }
+
+    prepareHeroVideo();
+
     function openIntro() {
         if (introOpened) return;
         introOpened = true;
@@ -125,6 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
         introMotion.kill();
         blob.style.pointerEvents = 'none';
         gsap.set(mainWrapper, { autoAlpha: 1 });
+        ensureHeroVideoPlaying();
         initEditorialAnimations();
 
         const tl = gsap.timeline({
@@ -167,6 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (lenis) lenis.scrollTo(0, { immediate: true });
                     if (lenis) lenis.start();
                     document.body.style.overflow = "auto";
+                    ensureHeroVideoPlaying();
                     ScrollTrigger.refresh();
                     lenisReady.then((activeLenis) => {
                         if (!activeLenis) return;
@@ -187,6 +226,34 @@ document.addEventListener('DOMContentLoaded', () => {
             openIntro();
         }
     });
+
+    window.addEventListener('pageshow', () => {
+        if (introOpened) ensureHeroVideoPlaying();
+    });
+
+    document.addEventListener('visibilitychange', () => {
+        if (!document.hidden && introOpened) ensureHeroVideoPlaying();
+    });
+
+    if (heroVideo) {
+        heroVideo.addEventListener('pause', () => {
+            if (!document.hidden && introOpened) {
+                window.setTimeout(ensureHeroVideoPlaying, 120);
+            }
+        });
+
+        heroVideo.addEventListener('stalled', () => {
+            if (!document.hidden && introOpened) {
+                window.setTimeout(ensureHeroVideoPlaying, 220);
+            }
+        });
+
+        heroVideo.addEventListener('canplay', () => {
+            if (!document.hidden && introOpened && heroVideo.paused) {
+                ensureHeroVideoPlaying();
+            }
+        });
+    }
 
     // 3. EDITORIAL ANIMATIONS
     let editorialAnimationsStarted = false;
