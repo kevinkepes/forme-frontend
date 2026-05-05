@@ -332,20 +332,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            gsap.fromTo(".flow-divider svg",
-                { xPercent: -3, scaleY: 0.86, transformOrigin: "center bottom" },
-                {
-                    xPercent: 3,
-                    scaleY: 1.18,
-                    ease: "none",
-                    scrollTrigger: {
-                        trigger: ".flow-divider",
-                        start: "top bottom",
-                        end: "bottom top",
-                        scrub: true
-                    }
-                }
-            );
+            gsap.set(".flow-divider svg", {
+                clearProps: "transform",
+                transformOrigin: "center bottom"
+            });
         }
 
         images.forEach((container) => {
@@ -372,48 +362,48 @@ document.addEventListener('DOMContentLoaded', () => {
                 );
             }
 
-            gsap.fromTo(container,
-                {
-                    y: 70,
-                    opacity: 0,
-                    scale: 0.94
-                },
-                {
+            const revealTimeline = gsap.timeline({
+                paused: true,
+                defaults: { overwrite: "auto" }
+            })
+                .fromTo(container,
+                    {
+                        y: 70,
+                        opacity: 0,
+                        scale: 0.94,
+                        willChange: "transform, opacity"
+                    },
+                    {
+                        y: 0,
+                        opacity: 1,
+                        scale: 1,
+                        duration: 0.9,
+                        ease: "power3.out",
+                        clearProps: "willChange"
+                    },
+                    0
+                )
+                .to(caption, {
+                    yPercent: 0,
+                    opacity: 1,
+                    duration: 0.75,
+                    ease: "power3.out"
+                }, 0.12)
+                .to(captionCopy, {
                     y: 0,
                     opacity: 1,
-                    scale: 1,
-                    duration: 0.9,
-                    ease: "power3.out",
-                    scrollTrigger: {
-                        trigger: container,
-                        start: "top 80%",
-                        once: true
-                    }
-                }
-            );
+                    duration: 0.65,
+                    ease: "power2.out"
+                }, 0.22);
 
-            gsap.to(caption, {
-                yPercent: 0,
-                opacity: 1,
-                duration: 0.75,
-                ease: "power3.out",
-                scrollTrigger: {
-                    trigger: container,
-                    start: "top 72%",
-                    once: true
-                }
-            });
-
-            gsap.to(captionCopy, {
-                y: 0,
-                opacity: 1,
-                duration: 0.65,
-                ease: "power2.out",
-                scrollTrigger: {
-                    trigger: container,
-                    start: "top 68%",
-                    once: true
-                }
+            ScrollTrigger.create({
+                trigger: container,
+                start: "top 80%",
+                end: "bottom 16%",
+                onEnter: () => revealTimeline.play(),
+                onEnterBack: () => revealTimeline.play(),
+                onLeave: () => revealTimeline.reverse(),
+                onLeaveBack: () => revealTimeline.reverse()
             });
         });
 

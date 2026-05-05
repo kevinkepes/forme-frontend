@@ -254,7 +254,8 @@ body {
 
 .flow-divider svg {
     display: block;
-    width: 100%;
+    width: calc(100% + 2px);
+    margin-left: -1px;
     height: 100%;
 }
 
